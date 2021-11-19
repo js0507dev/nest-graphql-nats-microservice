@@ -1,0 +1,25 @@
+{
+  "name": "nest-graphql-nats-microservice",
+  "version": "0.1.0",
+  "description": "A sample GraphQL API Gateway with nats back-end microservices built using the NestJS framework.",
+  "scripts": {
+    "docs:proto-gen": "./scripts/generate-proto-docs.sh",
+    "install": "./scripts/install.sh",
+    "lint": "./scripts/lint.sh",
+    "build": "./scripts/build.sh",
+    "docker:build": "docker-compose build",
+    "docker:start": "docker-compose up",
+    "docker:teardown": "docker-compose down",
+    "start": "npm run install && npm run lint && npm run build && npm run docker:build && npm run docker:start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com-me:js0507dev/nest-graphql-nats-microservice.git"
+  },
+  "author": "JS Shim <js0507dev@gmail.com> (https://github.com/js0507dev)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/js0507dev/nest-graphql-nats-microservice/issues"
+  },
+  "homepage": "https://github.com/js0507dev/nest-graphql-nats-microservice#readme"
+}
