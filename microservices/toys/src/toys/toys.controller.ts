@@ -1,8 +1,9 @@
 import { Controller } from '@nestjs/common';
-import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
-import { ToysService } from './toys.service';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+
 import { CreateToyDto } from './dto/create-toy.dto';
 import { UpdateToyDto } from './dto/update-toy.dto';
+import { ToysService } from './toys.service';
 
 @Controller()
 export class ToysController {

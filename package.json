@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "description": "A sample GraphQL API Gateway with nats back-end microservices built using the NestJS framework.",
   "scripts": {
-    "docs:proto-gen": "./scripts/generate-proto-docs.sh",
     "install": "./scripts/install.sh",
     "lint": "./scripts/lint.sh",
     "build": "./scripts/build.sh",
@@ -14,12 +13,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com-me:js0507dev/nest-graphql-nats-microservice.git"
+    "url": "git+ssh://git@github.com:js0507dev/nest-graphql-nats-microservice.git"
   },
   "author": "JS Shim <js0507dev@gmail.com> (https://github.com/js0507dev)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/js0507dev/nest-graphql-nats-microservice/issues"
   },
-  "homepage": "https://github.com/js0507dev/nest-graphql-nats-microservice#readme"
+  "homepage": "https://github.com/js0507dev/nest-graphql-nats-microservice#readme",
+  "devDependencies": {
+    "cz-conventional-changelog": "^3.3.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }

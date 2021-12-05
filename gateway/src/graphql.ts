@@ -1,4 +1,3 @@
-
 /*
  * -------------------------------------------------------
  * THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
@@ -28,6 +27,14 @@ export class UpdateOwnerInput {
     name?: Nullable<string>;
 }
 
+export class CreateToyInput {
+    exampleField?: Nullable<number>;
+}
+
+export class UpdateToyInput {
+    id: number;
+}
+
 export class Cat {
     id: number;
     name: string;
@@ -43,6 +50,10 @@ export abstract class IQuery {
     abstract owners(): Nullable<Nullable<Owner>[]> | Promise<Nullable<Nullable<Owner>[]>>;
 
     abstract owner(id: number): Nullable<Owner> | Promise<Nullable<Owner>>;
+
+    abstract toys(): Nullable<Toy>[] | Promise<Nullable<Toy>[]>;
+
+    abstract toy(id: number): Nullable<Toy> | Promise<Nullable<Toy>>;
 }
 
 export abstract class IMutation {
@@ -57,12 +68,22 @@ export abstract class IMutation {
     abstract updateOwner(updateOwnerInput: UpdateOwnerInput): Owner | Promise<Owner>;
 
     abstract removeOwner(id: number): Nullable<Owner> | Promise<Nullable<Owner>>;
+
+    abstract createToy(createToyInput: CreateToyInput): Toy | Promise<Toy>;
+
+    abstract updateToy(updateToyInput: UpdateToyInput): Toy | Promise<Toy>;
+
+    abstract removeToy(id: number): Nullable<Toy> | Promise<Nullable<Toy>>;
 }
 
 export class Owner {
     id: number;
     name: string;
     cats?: Nullable<Cat[]>;
+}
+
+export class Toy {
+    exampleField?: Nullable<number>;
 }
 
 type Nullable<T> = T | null;

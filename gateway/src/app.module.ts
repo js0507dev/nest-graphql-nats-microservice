@@ -1,9 +1,11 @@
+import { join } from 'path';
+
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
-import { join } from 'path';
+
 import { CatsModule } from './cats/cats.module';
 import { OwnersModule } from './owners/owners.module';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ToysModule } from './toys/toys.module';
 
 @Module({
   imports: [
@@ -16,7 +18,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       },
     }),
     OwnersModule,
+    ToysModule,
   ],
 })
-export class AppModule {
-}
+export class AppModule {}

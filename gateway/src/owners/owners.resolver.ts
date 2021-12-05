@@ -1,16 +1,12 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
-import { OwnersService } from './owners.service';
+
 import * as gql from '../graphql';
-import { Inject } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
-import { firstValueFrom } from 'rxjs';
+
+import { OwnersService } from './owners.service';
 
 @Resolver('Owner')
 export class OwnersResolver {
-  constructor(
-    private readonly ownersService: OwnersService,
-    @Inject('TOYS_SERVICE') private toysService: ClientProxy,
-  ) {}
+  constructor(private readonly ownersService: OwnersService) {}
 
   @Mutation('createOwner')
   create(@Args('createOwnerInput') createOwnerInput: gql.CreateOwnerInput) {
@@ -19,17 +15,7 @@ export class OwnersResolver {
 
   @Query('owners')
   async findAll() {
-    const toys = await firstValueFrom(
-      this.toysService.send<string>(
-        'findAllToys',
-        JSON.stringify({}),
-      ),
-    );
     const owners = this.ownersService.findAll();
-    owners.push({
-      id: 12345,
-      name: toys,
-    });
     return owners;
   }
 

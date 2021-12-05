@@ -1,44 +1,51 @@
-import { Injectable } from '@nestjs/common';
-import * as gql from '../graphql';
-import { Cat } from './entities/cat.entity';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
 
-let dumyCats: Cat[] = [new Cat(1, 'green', 2, 1), new Cat(2, 'red', 4, 2)];
+import * as gql from '../graphql';
 
 @Injectable()
 export class CatsService {
-  create(createCatInput: gql.CreateCatInput): gql.Cat {
-    const createdCat = new Cat(
-      dumyCats.length + 1,
-      createCatInput.name,
-      createCatInput.age,
-      createCatInput.ownerId,
+  constructor(
+    @Inject('TOYS_SERVICE') private toysService: ClientProxy,
+    @Inject('CATS_SERVICE') private catsService: ClientProxy,
+  ) {}
+  async create(createCatInput: gql.CreateCatInput): Promise<gql.Cat> {
+    console.log(createCatInput);
+    const createdCat = await firstValueFrom(
+      this.catsService.send<gql.Cat>('createCat', createCatInput),
     );
-    dumyCats.push(createdCat);
-    return createdCat.toDto();
+    return createdCat;
   }
 
-  findAll(): gql.Cat[] {
-    return dumyCats.map((cat) => cat.toDto());
+  async findAll(): Promise<gql.Cat[]> {
+    const cats = await firstValueFrom(
+      this.catsService.send<gql.Cat[]>('findAllCats', {}),
+    );
+    return cats;
   }
 
-  findOne(id: number): gql.Cat {
-    return dumyCats.find((cat) => cat.id === id).toDto();
+  async findOne(id: number): Promise<gql.Cat> {
+    const findCat = await firstValueFrom(
+      this.catsService.send<gql.Cat>('findOneCat', { id }),
+    );
+    return findCat;
   }
 
-  update(id: number, updateCatInput: gql.UpdateCatInput): gql.Cat {
-    dumyCats = dumyCats.map((cat) => {
-      if (cat.id === id) {
-        cat.name = updateCatInput.name;
-        cat.age = updateCatInput.age;
-      }
-      return cat;
-    });
-    return dumyCats.find((cat) => cat.id === id).toDto();
+  async update(
+    id: number,
+    updateCatInput: gql.UpdateCatInput,
+  ): Promise<gql.Cat> {
+    const updatedCat = await firstValueFrom(
+      this.catsService.send<gql.Cat>('updateCat', updateCatInput),
+    );
+    return updatedCat;
   }
 
-  remove(id: number): gql.Cat {
-    const removeCat = dumyCats.find((cat) => cat.id === id);
-    dumyCats = dumyCats.filter((cat) => cat.id !== id);
-    return removeCat.toDto();
+  async remove(id: number): Promise<gql.Cat> {
+    const removedCat = await firstValueFrom(
+      this.catsService.send<gql.Cat>('removeCat', { id }),
+    );
+    return removedCat;
   }
 }

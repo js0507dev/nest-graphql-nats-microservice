@@ -1,20 +1,18 @@
 import { Module } from '@nestjs/common';
-import { OwnersService } from './owners.service';
-import { OwnersResolver } from './owners.resolver';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
+import { OwnersResolver } from './owners.resolver';
+import { OwnersService } from './owners.service';
+
 @Module({
-  providers: [
-    OwnersResolver,
-    OwnersService,
-  ],
+  providers: [OwnersResolver, OwnersService],
   imports: [
     ClientsModule.register([
       {
-        name: 'TOYS_SERVICE',
+        name: 'OWNERS_SERVICE',
         transport: Transport.NATS,
         options: {
-          queue: 'toys_queue',
+          queue: 'owners_queue',
           url: 'nats://localhost:4222',
         },
       },

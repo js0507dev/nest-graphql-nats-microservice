@@ -1,21 +1,22 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
-import { CatsService } from './cats.service';
+
 import * as gql from '../graphql';
-import { nc, sc } from '../nats';
+
+import { CatsService } from './cats.service';
 
 @Resolver('Cat')
 export class CatsResolver {
-  constructor(private readonly catsService: CatsService) {
-  }
+  constructor(private readonly catsService: CatsService) {}
 
   @Mutation('createCat')
-  createCat(@Args('createCatInput') createCatInput: gql.CreateCatInput): gql.Cat | Promise<gql.Cat> {
+  createCat(
+    @Args('createCatInput') createCatInput: gql.CreateCatInput,
+  ): gql.Cat | Promise<gql.Cat> {
     return this.catsService.create(createCatInput);
   }
 
   @Query('cats')
   cats(): gql.Cat[] | Promise<gql.Cat[]> {
-    nc.publish('hello', sc.encode('world'));
     return this.catsService.findAll();
   }
 

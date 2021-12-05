@@ -1,44 +1,44 @@
 import { Inject, Injectable } from '@nestjs/common';
-import * as gql from '../graphql';
-import { Owner } from './entities/owner.entity';
 import { ClientProxy } from '@nestjs/microservices';
-import { Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
-let dumyOwners: Owner[] = [new Owner(1, 'tanner'), new Owner(2, 'colin')];
+import * as gql from '../graphql';
 
 @Injectable()
 export class OwnersService {
-  create(createOwnerInput: gql.CreateOwnerInput) {
-    const createdOwner = new Owner(
-      dumyOwners.length + 1,
-      createOwnerInput.name,
+  constructor(@Inject('OWNERS_SERVICE') private ownersService: ClientProxy) {}
+  async create(createOwnerInput: gql.CreateOwnerInput) {
+    const createdOwner = await firstValueFrom(
+      this.ownersService.send<gql.Owner>('createOwner', createOwnerInput),
     );
-    dumyOwners.push(createdOwner);
-    return createdOwner.toDto();
-    return 'This action adds a new owner';
+    return createdOwner;
   }
 
-  findAll() {
-    return dumyOwners.map((owner) => owner.toDto());
+  async findAll() {
+    const findOwners = await firstValueFrom(
+      this.ownersService.send<gql.Owner[]>('findAllOwners', {}),
+    );
+    return findOwners;
   }
 
-  findOne(id: number) {
-    return dumyOwners.find((owner) => owner.id === id).toDto();
+  async findOne(id: number) {
+    const findOwner = await firstValueFrom(
+      this.ownersService.send<gql.Owner>('findOwner', { id }),
+    );
+    return findOwner;
   }
 
-  update(id: number, updateOwnerInput: gql.UpdateOwnerInput) {
-    dumyOwners = dumyOwners.map((owner) => {
-      if (owner.id === id) {
-        owner.name = updateOwnerInput.name;
-      }
-      return owner;
-    });
-    return dumyOwners.find((owner) => owner.id === id).toDto();
+  async update(id: number, updateOwnerInput: gql.UpdateOwnerInput) {
+    const updatedOwner = await firstValueFrom(
+      this.ownersService.send<gql.Owner>('updateOwner', { updateOwnerInput }),
+    );
+    return updatedOwner;
   }
 
-  remove(id: number) {
-    const removeOwner = dumyOwners.find((owner) => owner.id === id);
-    dumyOwners = dumyOwners.filter((owner) => owner.id !== id);
-    return removeOwner.toDto();
+  async remove(id: number) {
+    const removedOwner = await firstValueFrom(
+      this.ownersService.send<gql.Owner>('removeOwner', { id }),
+    );
+    return removedOwner;
   }
 }
